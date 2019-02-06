@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Heroe} from '../../interfaces/heroe.interface';
 import {HeroesService} from '../../services/heroes.service';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-heroe',
@@ -17,7 +17,18 @@ export class HeroeComponent implements OnInit {
     casa: "Marvel"
   }
 
-  constructor(private _hs:HeroesService, private router:Router) { }
+  nuevo:boolean = false;
+  id:string;
+
+  constructor(private _hs:HeroesService, private router:Router, private activatedRoute:ActivatedRoute) { 
+
+    this.activatedRoute.params.subscribe( parametros => {
+      console.log(parametros);
+      this.id = parametros['id'];
+
+    });
+
+  }
 
   ngOnInit() {
   }
@@ -25,13 +36,33 @@ export class HeroeComponent implements OnInit {
   guardar(){
     console.log(this.heroe);
 
-    this._hs.nuevoHeroe(this.heroe).subscribe(data => {
-      let datos:any = data; 
-      this.router.navigate(['/heroe', datos.name]);
-    },
-    error => {
-      console.error(error);
-    });
+
+    if(this.id == "nuevo"){
+      // INSERTANDO
+
+      this._hs.nuevoHeroe(this.heroe).subscribe(data => {
+        let datos:any = data; 
+        this.router.navigate(['/heroe', datos.name]);
+      },
+      error => {
+        console.error(error);
+      });
+
+    }else{
+      // ACTUALIZANDO
+
+      this._hs.actualizarHeroe(this.heroe, this.id).subscribe(data => {
+        let datos:any = data;
+        console.log(datos);
+      },
+      error =>{
+        console.error(error);
+      });
+      
+    }
+
+
+    
   }
 
 }
