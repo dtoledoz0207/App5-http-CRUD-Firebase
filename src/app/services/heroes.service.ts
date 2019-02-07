@@ -61,4 +61,13 @@ export class HeroesService {
     }));
   }
 
+
+  borrarHeroe(key$:string){
+    let url = `${this.heroeURL}/${key$}.json`;
+
+    return this.http.delete(url).pipe(map(resultado => {
+      return resultado;
+    }));
+  }
+
 }
