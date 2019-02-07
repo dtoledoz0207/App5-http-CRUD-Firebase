@@ -38,6 +38,15 @@
         </tbody>
       </table>
 
+
+      <div class="alert alert-info" role="alert" *ngIf="(heroes | keys).length === 0 && loading === false">
+       <strong>¡No hay!</strong> registros que mostrar
+      </div>
+
+      <div class="alert alert-warning" role="alert" *ngIf="loading">
+        <strong>Cargando...</strong> por favor espere
+      </div>
+
     </div>
   </div>
 </div>
